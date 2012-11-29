@@ -71,22 +71,22 @@ for h in h_values:
     #     Source function determined by the manufactured
     #     solution u0 and the diffusion coefficient 
     #     alpha.
-    f = Expression('-rho*pow(x[0], 3)/3.0 + rho*x[0]*x[0]/2.0 '\
-                       '+ 8.0*pow(t, 3)*pow(x[0], 7)/9.0 '\
-                       '- 28.0*pow(t, 3)*pow(x[0], 6)/9.0 '\
-                       '+ 7.0*pow(t, 3)*pow(x[0], 5)/2.0 '\
-                       '- 5.0*pow(t, 3)*pow(x[0], 4)/4.0 '\
-                       '+ 2*t*x[0] - t', t=0.0, rho=rho)
+    # f = Expression('-rho*pow(x[0], 3)/3.0 + rho*x[0]*x[0]/2.0 '\
+    #                    '+ 8.0*pow(t, 3)*pow(x[0], 7)/9.0 '\
+    #                    '- 28.0*pow(t, 3)*pow(x[0], 6)/9.0 '\
+    #                    '+ 7.0*pow(t, 3)*pow(x[0], 5)/2.0 '\
+    #                    '- 5.0*pow(t, 3)*pow(x[0], 4)/4.0 '\
+    #                    '+ 2*t*x[0] - t', t=0.0, rho=rho)
 
-    # f = Expression('rho*x[0]*x[0]*(-2*x[0] + 3)/6 -'\
-    #                   '(-12*t*x[0] + 3*t*(-2*x[0] + 3))'\
-    #                   '*(pow(x[0], 4)*pow((-dt + t), 2)'\
-    #                   '*pow((-2*x[0] + 3), 2) + 36)/324'\
-    #                   '- (-6*t*x[0]*x[0] + 6*t*x[0]*(-2*x[0] + 3))'\
-    #                   '*(36*pow(x[0], 4)*pow((-dt + t), 2)*(2*x[0] - 3)'\
-    #                   '+ 36*pow(x[0], 3)*pow((-dt + t), 2)'\
-    #                   '*pow((-2*x[0] + 3), 2))'\
-    #                   '/5832', t=0.0, dt=dt, rho=rho)
+    f = Expression('rho*x[0]*x[0]*(-2*x[0] + 3)/6 -'\
+                      '(-12*t*x[0] + 3*t*(-2*x[0] + 3))'\
+                      '*(pow(x[0], 4)*pow((-dt + t), 2)'\
+                      '*pow((-2*x[0] + 3), 2) + 36)/324'\
+                      '- (-6*t*x[0]*x[0] + 6*t*x[0]*(-2*x[0] + 3))'\
+                      '*(36*pow(x[0], 4)*pow((-dt + t), 2)*(2*x[0] - 3)'\
+                      '+ 36*pow(x[0], 3)*pow((-dt + t), 2)'\
+                      '*pow((-2*x[0] + 3), 2))'\
+                      '/5832', t=0.0, dt=dt, rho=rho)
     
     # f = Expression('8*dt*dt*t*pow(x[0], 7)/9 '\
     #                    '- 28*dt*dt*t*pow(x[0], 6)/9 '\
@@ -118,7 +118,7 @@ for h in h_values:
     u = Function(V)
     t = dt
     tol = 1E-10
-    max_iter = 30
+    max_iter = 1
     #     Loop over time
     while t <= T:
         f.t = t
