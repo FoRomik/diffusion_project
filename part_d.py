@@ -9,6 +9,9 @@ one Picard iteration at every time step.
 The PDE is discretized in time using the Backward 
 Euler method. 
 
+In this file we test the convergence rate of a
+simple linear problem.
+
 """
 import scitools.std as sci
 import nose.tools as nt
@@ -18,17 +21,21 @@ import numpy, sys
 Ct = 1.0
 Cx = 0.01
 
-h_values = 0.05, 0.01, 0.005, 0.001#, 0.0005#, 0.0001
+h_values = [0.05, 0.01, 0.005, 0.001]
 errors = []
+
+file_1 = open('x_u_d3.dat','w')
+file_e = open('x_ue_d3.dat','w')
 
 for h in h_values:
     
-    #     degree = degree of finite element approximation
-    #     n_elements = list of number of elements
-    #                  for each dimension
-    #     dim = physical space dimension
-    #     ref_domain = type of reference domain
-    #     V = test function space
+    #     degree:        Degree of finite element 
+    #                    approximation
+    #     n_elements:    List of number of elements
+    #                    for each dimension
+    #     dim:           Physical space dimension
+    #     ref_domain:    Type of reference domain
+    #     V:             Test function space
     degree = 1
     Nx = int(round(1.0/numpy.sqrt(Cx*h)))
     n_elements = [Nx, Nx]
@@ -42,15 +49,14 @@ for h in h_values:
     #     formulation.     
     #
     #     Initial condition
-    #u0 = Expression('exp(-pi*pi*t)*cos(pi*x[0])', t=0.0)
-    u0 = Expression('x[0]*x[0]*(0.5 - x[0]/3.0)*t', t=0.0)
-    #u0 = Expression('x[0]*x[0]*(0.5 - x[0]/3.0)')
+    u0 = Expression('exp(-pi*pi*t)*cos(pi*x[0])', t=0.0)
     u_1 = interpolate(u0, V)
     
-    #     dt = time step length
-    #     T = stopping time for simulation
-    dt = Ct*h
+    #     dt:       Time step length
+    #     T:        Stopping time for simulation
     T = 0.05
+    Nt = int(round(T/(Ct*h)))
+    dt = T/Nt
     print 'Nx = ', Nx, ', dt = ', dt
     
     #     Diffusion coefficient
@@ -58,15 +64,9 @@ for h in h_values:
         return 1.0
     
     #     Source function
-    #f = Constant(0.0)
+    f = Constant(0.0)
+    #     Constant rho
     rho = 1.0
-    f = Expression('-x[0]*x[0]*x[0]/3.0 + 0.5*x[0]*x[0]'\
-                       ' + 2.0*t*x[0] - t', t=0.0)
-    #f = Expression('rho*x[0]*x[0]/2.0 - rho*x[0]*x[0]*x[0]/3.0 - t'\
-    #                   '+ 5.0*x[0]*t/3.0 - x[0]*x[0]*t/3.0',\
-    #                   t=0.0, rho=rho)
-    #f = Expression('2.0*x[0] - 1.0')
-
     
     #     Set up the variational formulation
     u = TrialFunction(V)
@@ -91,17 +91,28 @@ for h in h_values:
         u0.t = t
         u_e = interpolate(u0, V)
         e = u_e.vector().array() - u.vector().array()
-        E = numpy.sqrt(numpy.sum(e**2)/u.vector().array().size)
+        E = numpy.sqrt(numpy.sum(e**2) \
+                           /u.vector().array().size)
         
         if t+dt > T: 
             errors.append(E)
             #plot(u)
             #interactive()
 
+            #     Write numerical and exact solutions
+            #     to file
+            # uv = u.vector().array()
+            # x = numpy.zeros(len(uv))
+            # for i in range(len(uv)): 
+            #     file_1.write(str(mesh.coordinates()[i][0])
+            #                  +' '+str(u.vector().array()[i])+'\n')
+            #     file_e.write(str(mesh.coordinates()[i][0])
+            #                  +' '+str(u_e.vector().array()[i])+'\n')
+
         t += dt
         u_1.assign(u)
 
-print 'erros = ', errors
+print 'errors = ', errors
 nh = len(h_values)
         
 #     Calculate convergence rates
@@ -115,7 +126,9 @@ for i in range(1, nh):
 
 #     Check that convergence rate is 1 with a nose
 #     test
-#diff = abs(r[nh-2]-1.0)
-#print 'diff = ', diff
-#nt.assert_almost_equal(diff, 0, delta=1E-2)
+diff = abs(r[nh-2]-1.0)
+print 'diff = ', diff
+nt.assert_almost_equal(diff, 0, delta=1E-2)
 
+file_1.close()
+file_e.close()
