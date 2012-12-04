@@ -110,7 +110,8 @@ while t <= T:
         
         #     Update u_q1
         u_q1.assign(u)
-    
+
+    #     Write data to files 
     if n%100 == 0:
         print 't = ', t
         i_fig += 1
