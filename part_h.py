@@ -122,22 +122,7 @@ while t <= T:
         fi = interpolate(f, V)
         file = File('f_function_t' + str(t) + '.pvd')
         file << fi 
-
-    #print 'iter = ', iteration
     
     t += dt
     u_1.assign(u)
 
-#x = mesh.coordinates()[:][:]
-#print 'x=',x
-#print 'uv=',u.vector().array()
-#mlab.surf(u.vector().array())
-#mlab.mesh(u.vector().array())
-#file = File('mesh.pvd')
-#file << mesh
-
-#plot(u)
-#file = File('gaussian_1.pvd')
-#file << u
-#interactive()
-#print 'E = ', E
