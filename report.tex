@@ -109,10 +109,10 @@ expressions needed for Newton's method are derived.
 
 
 % Section with multi-line equation.
-\section{Introduction}
+%\section{Introduction}
 
-\label{Introduction}
-
+%\label{Introduction}
+\newpage
 
 \section{The nonlinear diffusion equation}
 \label{pde}
@@ -129,7 +129,7 @@ and
 \begin{equation}
   \frac{\partial u}{\partial n} = 0, \qquad \mathbf{x} \in \partial\Omega , 
 \end{equation}
-respectively. Here $\partial /\partial n$ denotes differentiation in the direction of the normal to the domain $\Omega $, and we have therefore the Neumann boundary condition. The diffusion coefficient $\alpha(u)$ gives the system its nonlinearity, provided that $\alpha $ has a dependency on $u$. The function $f(\mathbf{x}, t)$ may be interpreted as a source term in the equation. 
+respectively. Here $\partial /\partial n$ denotes differentiation in the direction of the normal to the domain $\Omega $, and we have therefore a Neumann boundary condition. The symbol $\partial \Omega $ is used for the boundary of the domain $\Omega $. The diffusion coefficient $\alpha(u)$ gives the system its nonlinearity, provided that $\alpha $ has a dependency on $u$. The function $f(\mathbf{x}, t)$ may be interpreted as a source term in the equation. 
 
 
 
@@ -186,18 +186,18 @@ Next, we expand $u$ and $v$ in the basis $\left\{ \varphi_{i}(\mathbf{x}) \right
 \end{align}
 When substituting the basis expansion, the variational equation becomes
 \begin{align}
-  & \sum_{j=0}^{N_{s}} \left\{ \varrho \int_{\Omega }\varphi_{i}\varphi_{j}d\mathbf{x} + \Delta t \int_{\Omega }\alpha\left( \sum_{l=0}^{N_{s}}c_{l}^{n, q-1}\right)\nabla \varphi_{i} \cdot \nabla \varphi_{j}d\mathbf{x} \right\}c_{j}^{n, q} \nonumber \\
+  & \sum_{j=0}^{N_{s}} \left\{ \varrho \int_{\Omega }\varphi_{i}\varphi_{j}d\mathbf{x} + \Delta t \int_{\Omega }\alpha\left( \sum_{l=0}^{N_{s}}c_{l}^{n, q-1}\varphi_{l}\right)\nabla \varphi_{i} \cdot \nabla \varphi_{j}d\mathbf{x} \right\}c_{j}^{n, q} \nonumber \\
   & = \Delta t \int_{\Omega }f(\mathbf{x}, t_{n})\varphi_{i}d\mathbf{x} + \varrho \int_{\Omega } \left( \sum_{l=0}^{N_{s}}c_{l}^{n-1}\varphi_{l} \right)\varphi_{i}d\mathbf{x} , \quad i = 0, \dots , N_{s}.
 \end{align}
 Let us define the matrix $A$ by the matrix elements
 \begin{align}
   A_{i, j} =& \varrho \int_{\Omega }\varphi_{i}\varphi_{j}d\mathbf{x} \nonumber \\
-  & + \Delta t \int_{\Omega }\alpha\left( \sum_{l=0}^{N_{s}}c_{l}^{n, q-1}\varphi_{l}\right)\nabla \varphi_{i}\cdot \nabla \varphi_{j}d\mathbf{x}
+  & + \Delta t \int_{\Omega }\alpha\left( \sum_{l=0}^{N_{s}}c_{l}^{n, q-1}\varphi_{l}\right)\nabla \varphi_{i}\cdot \nabla \varphi_{j}d\mathbf{x}, \quad i, j = 0, \dots , N_{s}, 
 \end{align}
 and the vector $b$ by the vector elements
 \begin{align}
   b_{i} =& \Delta t \int_{\Omega }f(\mathbf{x}, t_{n})\varphi_{i}d\mathbf{x} \nonumber \\
-  & + \varrho \int_{\Omega }\left( \sum_{l=0}^{N_{s}}c_{l}^{n-1}\varphi_{l}\right) \varphi_{i}d\mathbf{x}.
+  & + \varrho \int_{\Omega }\left( \sum_{l=0}^{N_{s}}c_{l}^{n-1}\varphi_{l}\right) \varphi_{i}d\mathbf{x}, \qquad i = 0, \dots , N_{s}.
 \end{align}
 Then the variational formualation becomes a linear system of algebraic equations
 \begin{equation}
@@ -489,7 +489,15 @@ Another of the suggested tests was to use the manufactured solution
 \end{equation}
 which fulfills the given Neumann boundary conditions. As suggested, we used the function $\alpha(u) = 1 + u^{2}$, and the function $f$ was chosen to satisfy the PDE. We tested the convergence rate of this equation both with one Picard iteration and with a converged solution of the Picard iteration scheme. In both cases we got a convergence rate approaching 1, as theoretically expected. The implementation is stored in the file \verb+part_g.py+.
 
-In the FEniCS program, numerical errors are caused by a finite time step $\Delta t$, finite space elements, a finite number of Picard iterations and finite precision of the floating-point numbers. It is also possible that some of the used numerical schemes are instable with respect to numerical errors.
+In the FEniCS program, numerical errors are caused by 
+\begin{itemize}
+  \item a finite time step $\Delta t$,
+  \item finite space elements (finite $\Delta x$),
+  \item finite degree of polynomials Pn,
+  \item a finite number of Picard iterations,
+  \item finite precision of the floating-point numbers.
+\end{itemize}
+It is also possible that some of the used numerical schemes are instable with respect to numerical errors.
 
 
 \section{Numerical experiments}
@@ -504,7 +512,7 @@ where we used $\beta = 10000$ and $\sigma = 0.01$. The domain of the space coord
 \begin{equation}
   f(x, y, t) = \exp(-t)y\sin(10xt). 
 \end{equation}
-This function is plotted in Fig. \ref{fig:f_t0.5} using a space coordinate grid with $N_{x} \times N_{y} = 100 \times 100$ and at $t = 0.5$. The type of finite element mesh we used is plotted in Fig. \ref{fig:mesh}.
+This function is plotted in Fig. \ref{fig:f_t0.5} using a space coordinate grid with $N_{x} \times N_{y} = 60 \times 60$ and at $t = 0.5$. The type of finite element mesh we used is plotted in Fig. \ref{fig:mesh}.
 
 \begin{figure} 
   \centering
@@ -587,17 +595,17 @@ In Fig. \ref{fig:t5}, we have plotted a snapshot of a solution $u_{h}$ taken at 
     }
   }
   \centering
-  \caption{The solution $u_{h}$ at time $t = 4$, as calculated with P1 elements. Left: $80 \times 80$ mesh points. Center: $100 \times 100$ mesh points. Right: $120 \times 120$ mesh points. As seen, the result is not converged with $100 \times 100$ mesh points.}
+  \caption{The solution $u_{h}$ at time $t = 4$, as calculated with P1 elements. Left: $80 \times 80$ mesh points. Center: $100 \times 100$ mesh points. Right: $120 \times 120$ mesh points. As seen, the result is not converged with $100 \times 100$ mesh points.} \label{fig:t4_Nx80100120}
 
 \end{figure}
 
-At the time $t = 4$ the source function $f$ is much more complicated, as can be seen from Fig. \ref{fig:f_t4}. The rapid oscillations in $f$ gives rise to problems in the finite element solution. In Fig. \ref{fig:t4_Nx20} we have plotted the solution as obtained with $20 \times 20$ mesh points and P1 and P2 elements, at left and right, respectively. Both solutions are far from smooth, and they are quite different with P1 and P2 elements. The same case is repeated in Fig. \ref{fig:t4_Nx60}, but here with $60 \times 60$ space mesh points. Still with a $60 \times 60$ mesh, the P1 and P2 approximations give clearly different solutions. When increasing the number of grid points to $80 \times 80$, $100 \times 100$, and $120 \times 120$, and using P1 elements, the solution does not converge to the same visual picture. This is a bit surprising, since with 100 grid points there should be approximately 14 grid points per period of the function $f$, since $f$ has 7 wave crests in Fig. \ref{fig:f_t4}.    
+At the time $t = 4$, the source function $f$ is much more complicated, as can be seen from Fig. \ref{fig:f_t4}. The rapid oscillations in $f$ gives rise to problems in the finite element solution. In Fig. \ref{fig:t4_Nx20} we have plotted the solution as obtained with $20 \times 20$ mesh points and P1 and P2 elements, at left and right, respectively. Both solutions are far from smooth, and they are quite different with P1 and P2 elements. The same case is repeated in Fig. \ref{fig:t4_Nx60}, but here with $60 \times 60$ space mesh points. Still with a $60 \times 60$ mesh, the P1 and P2 approximations give clearly different solutions. When increasing the number of grid points to $80 \times 80$, $100 \times 100$, and $120 \times 120$, and using P1 elements, the solution does not converge to the same visual picture (see Fig. \ref{fig:t4_Nx80100120}). This is a bit surprising, since with 100 grid points there should be approximately 14 grid points per period of the function $f$, since $f$ has 7 wave crests in Fig. \ref{fig:f_t4}.    
 
-As shown in Section 18 in the lecture notes, the diffusion equation discretized in time with the Backward Euler method gives a stable and non-oscillating solution provided the Courant number $C = \alpha \Delta t/\Delta x^{2}$ is a positive number. This is the case as long as $\alpha $ is positive. In the previous calculations, $\alpha $ was always positive. We did not either observe any instabilities in the results. For example with $\beta = 100$, which always gives a positive $\alpha$, we got a stable solution. When choosing $\beta = -100$, the solution became very instable.  
+As shown in Section 18 in the lecture notes, the diffusion equation discretized in time with the Backward Euler method gives a stable and non-oscillating solution, provided the Courant number $C = \alpha \Delta t/\Delta x^{2}$ is a positive number. This is the case as long as $\alpha $ is positive. In the previous calculations, $\alpha $ was always positive. We did not either observe any instabilities in the results. For example with $\beta = 100$, which always gives a positive $\alpha$, we got a stable solution. When choosing $\beta = -100$, the solution became very instable.  
 
 \section{Conclusions}
 
-First, we set up numerical schemes for solving nonlinear diffusion equations, discretizing in time with a finite difference method and in space with finite elements. We showed how the Picard iteration and Newton's methods can be used to solve the nonlinear systems of equations. The combined finite difference and finite element method was implemented using Python and the FEniCS software package. The code was tested using the method of manufactured solutions. Finally, we studied a few example cases using the implementation. We got unstable solutions in some cases when the diffusion function $\alpha $ was allowed to become negative.  
+First, we set up numerical schemes for solving nonlinear diffusion equations, discretizing in time with a finite difference method and in space with finite elements. We showed how the Picard iteration and Newton's methods can be used to solve the nonlinear systems of equations. The combined finite difference and finite element method was implemented with Picard iterations using Python and the FEniCS software package. The code was tested using a.o. the method of manufactured solutions. Finally, we studied a few example cases using the implementation. We got unstable solutions in some cases when the diffusion function $\alpha $ was allowed to become negative.  
 
 
 \printindex
